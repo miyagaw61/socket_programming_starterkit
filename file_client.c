@@ -120,7 +120,7 @@ void xxd(char *file_data, int file_size, char *data_hex, int data_hex_size) {
         data_hex[data_hex_idx] = bottom;
         data_hex_idx++;
     }
-    printf("data_hex: %s\n", data_hex);
+    printf("got data_hex\n");
 }
 
 void usage() {
@@ -179,7 +179,7 @@ int main(int argc, char *argv[]) {
         res += read(f, file_data, file_size);
     }
     close(f);
-    printf("file_data: %s\n", file_data);
+    printf("got file_data\n");
 
     char data_hex[data_hex_size];
     memset(data_hex, 0, data_hex_size);

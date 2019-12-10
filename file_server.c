@@ -116,7 +116,7 @@ void revert_xxd(char *data, char *data_hex, int data_hex_size) {
         data[data_idx] = top_bottom;
         data_idx++;
     }
-    printf("data: %s\n", data);
+    printf("got data\n");
 }
 
 void main_routine(struct sockaddr_in *addr, socklen_t addr_len) {
@@ -142,7 +142,7 @@ void main_routine(struct sockaddr_in *addr, socklen_t addr_len) {
     char data_hex[data_hex_size];
     memset(data_hex, 0, data_hex_size);
     my_read(client, data_hex, data_hex_size);
-    printf("got data_hex: %s\n", data_hex);
+    printf("got data_hex\n");
 
     char data[file_size];
     memset(data, 0, file_size);
@@ -157,7 +157,7 @@ void main_routine(struct sockaddr_in *addr, socklen_t addr_len) {
     my_write(f, data, file_size);
 
     close(f);
-    printf("wrote: %s\n", data_hex);
+    printf("wrote\n");
     exit_routine();
 }
 
