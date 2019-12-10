@@ -16,8 +16,8 @@ int sock;
 struct sigaction sa_sigabrt;
 
 void exit_routine(void) {
-	close(sock);
-	exit(0);
+    close(sock);
+    exit(0);
 }
 
 void handler(int sig, sigset_t *info, void *ctx) {
@@ -60,33 +60,33 @@ void my_write(int s, char *buf) {
 
 void my_connect(struct sockaddr_in *addr, socklen_t addr_len) {
     if (connect(sock, (struct sockaddr *) addr, addr_len) < 0) {
-		perror("connect");
-		exit_routine();
-	}
+        perror("connect");
+        exit_routine();
+    }
 }
 
 void my_read(int s, char *buf) {
-	memset(buf, 0, BUF_SIZE);
-	if (read(s, buf, BUF_SIZE) < 0) {
-	    perror("read");
-	    exit_routine();
-	}
+    memset(buf, 0, BUF_SIZE);
+    if (read(s, buf, BUF_SIZE) < 0) {
+        perror("read");
+        exit_routine();
+    }
 }
 
 int main(void) {
     register_sigaction();
     struct sockaddr_in addr;
     int n;
-	sock = create_sock();
+    sock = create_sock();
     create_addr(&addr, "127.0.0.1");
     socklen_t addr_len = sizeof(addr);
-	my_connect(&addr, addr_len);
-	char buf[BUF_SIZE] = {};
-	my_read(sock, buf);
-	printf("%s", buf);
-	fflush(0);
-	my_read(0, buf);
-	my_write(sock, buf);
-	close(sock);
+    my_connect(&addr, addr_len);
+    char buf[BUF_SIZE] = {};
+    my_read(sock, buf);
+    printf("%s", buf);
+    fflush(0);
+    my_read(0, buf);
+    my_write(sock, buf);
+    close(sock);
     return 0;
 }

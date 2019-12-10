@@ -88,35 +88,35 @@ void my_write(int s, char *buf, int size) {
 }
 
 void my_read(int s, char *buf, int size) {
-	memset(buf, 0, size);
-	if (read(s, buf, size) < 0) {
-	    perror("read");
-	    exit_routine();
-	}
+    memset(buf, 0, size);
+    if (read(s, buf, size) < 0) {
+        perror("read");
+        exit_routine();
+    }
 }
 
 void revert_xxd(char *data, char *data_hex, int data_hex_size) {
-	int i = 0;
-	int data_idx = 0;
-	for (i = 0; i < data_hex_size; i = i + 2) {
-		char top = data_hex[i];
-		char bottom = data_hex[i+1];
-		if (0x30 <= top && top <= 0x39) {
-			top = top - 0x30;
-		} else {
-			top = top - 0x61 + 0xa;
-		}
-		top = top << 4;
-		if (0x30 <= bottom && bottom <= 0x39) {
-			bottom = bottom - 0x30;
-		} else {
-			bottom = bottom - 0x61 + 0xa;
-		}
-		int top_bottom = top + bottom;
-		data[data_idx] = top_bottom;
-		data_idx++;
-	}
-	printf("data: %s\n", data);
+    int i = 0;
+    int data_idx = 0;
+    for (i = 0; i < data_hex_size; i = i + 2) {
+        char top = data_hex[i];
+        char bottom = data_hex[i+1];
+        if (0x30 <= top && top <= 0x39) {
+            top = top - 0x30;
+        } else {
+            top = top - 0x61 + 0xa;
+        }
+        top = top << 4;
+        if (0x30 <= bottom && bottom <= 0x39) {
+            bottom = bottom - 0x30;
+        } else {
+            bottom = bottom - 0x61 + 0xa;
+        }
+        int top_bottom = top + bottom;
+        data[data_idx] = top_bottom;
+        data_idx++;
+    }
+    printf("data: %s\n", data);
 }
 
 void main_routine(struct sockaddr_in *addr, socklen_t addr_len) {
@@ -125,38 +125,38 @@ void main_routine(struct sockaddr_in *addr, socklen_t addr_len) {
     client = dequeue_one_request(addr, addr_len);
     printf("dequeued!\n");
 
-	char file_name[BUF_SIZE] = {};
+    char file_name[BUF_SIZE] = {};
     my_read(client, file_name, BUF_SIZE);
     printf("got file_name: %s\n", file_name);
 
-	char new_file_name[BUF_SIZE] = {};
-	my_read(client, new_file_name, BUF_SIZE);
-	printf("new_file_name: %s\n", new_file_name);
+    char new_file_name[BUF_SIZE] = {};
+    my_read(client, new_file_name, BUF_SIZE);
+    printf("new_file_name: %s\n", new_file_name);
 
-	my_read(client, buf, sizeof(int));
-	int data_hex_size = *buf;
-	int file_size = data_hex_size / 2;
-	printf("data_hex_size: %d\n", data_hex_size);
-	printf("file_size: %d\n", file_size);
+    my_read(client, buf, sizeof(int));
+    int data_hex_size = *buf;
+    int file_size = data_hex_size / 2;
+    printf("data_hex_size: %d\n", data_hex_size);
+    printf("file_size: %d\n", file_size);
 
-	char data_hex[data_hex_size];
-	memset(data_hex, 0, data_hex_size);
+    char data_hex[data_hex_size];
+    memset(data_hex, 0, data_hex_size);
     my_read(client, data_hex, data_hex_size);
     printf("got data_hex: %s\n", data_hex);
 
-	char data[file_size];
-	memset(data, 0, file_size);
-	revert_xxd(data, data_hex, data_hex_size);
+    char data[file_size];
+    memset(data, 0, file_size);
+    revert_xxd(data, data_hex, data_hex_size);
 
-	remove(new_file_name);
+    remove(new_file_name);
     int f = open(new_file_name, O_RDWR|O_CREAT);
-	if (f < 0) {
-		perror("open");
-		exit_routine();
-	}
+    if (f < 0) {
+        perror("open");
+        exit_routine();
+    }
     my_write(f, data, file_size);
 
-	close(f);
+    close(f);
     printf("wrote: %s\n", data_hex);
     exit_routine();
 }

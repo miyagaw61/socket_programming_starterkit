@@ -85,16 +85,16 @@ void my_write(int s, char *buf) {
 }
 
 void my_read(int s, char *buf) {
-	memset(buf, 0, BUF_SIZE);
-	if (read(s, buf, BUF_SIZE) < 0) {
-	    perror("read");
-	    exit_routine();
-	}
+    memset(buf, 0, BUF_SIZE);
+    if (read(s, buf, BUF_SIZE) < 0) {
+        perror("read");
+        exit_routine();
+    }
 }
 
 int main(void) {
     register_sigaction();
-	char buf[BUF_SIZE] = {};
+    char buf[BUF_SIZE] = {};
     struct sockaddr_in addr;
     int n;
     sock = create_sock();
@@ -106,7 +106,7 @@ int main(void) {
         client = dequeue_one_request(&addr, addr_len);
         char *please_input = "Please input some strings: ";
         my_write(client, please_input);
-		my_read(client, buf);
+        my_read(client, buf);
         printf("%s\n", buf);
         close(client);
     }
