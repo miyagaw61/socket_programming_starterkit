@@ -133,8 +133,8 @@ void main_routine(struct sockaddr_in *addr, socklen_t addr_len) {
     my_read(client, new_file_name, BUF_SIZE);
     printf("new_file_name: %s\n", new_file_name);
 
-    my_read(client, buf, sizeof(int));
-    int data_hex_size = *buf;
+    my_read(client, buf, BUF_SIZE);
+    int data_hex_size = atoi(buf);
     int file_size = data_hex_size / 2;
     printf("data_hex_size: %d\n", data_hex_size);
     printf("file_size: %d\n", file_size);

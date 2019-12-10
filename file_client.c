@@ -168,7 +168,9 @@ int main(int argc, char *argv[]) {
 
     int data_hex_size = file_size * 2;
     printf("data_hex_size: %d\n", data_hex_size);
-    my_write(sock, (void *) &data_hex_size, sizeof(int));
+	memset(buf, 0, BUF_SIZE);
+	sprintf(buf, "%d", data_hex_size);
+    my_write(sock, buf, BUF_SIZE);
 
     char file_data[file_size];
     memset(file_data, 0, file_size);
